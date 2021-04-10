@@ -1,0 +1,36 @@
+services:
+    prometheus:
+      image: prom/prometheus
+      volumes:
+        - "./docker-compose/:/etc/prometheus/:ro"
+        - "prometheus_data:/prometheus"
+      command:
+        - '--config.file=/etc/prometheus/prometheus.yml'
+        - '--storage.tsdb.path=/prometheus'
+        - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+        - '--web.console.templates=/usr/share/prometheus/consoles'
+        - '--web.external-url=/prometheus/'
+        - '--web.route-prefix=/prometheus/'
+      labels:
+        - server.user=${TRAEFIK_IDENT}
+        - "traefik.enable=true"
+        - "traefik.http.routers.prometheus.rule=Host(`prometheus.kikkirej.net`)"
+        - "traefik.http.routers.prometheus.service=prometheus"
+        - "traefik.http.routers.prometheus.entrypoints=websecure"
+        - "traefik.http.routers.prometheus.middlewares=admin-auth@file"
+        - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+      environment:
+        - TZ=Europe/Berlin
+      networks:
+        - metrics
+        - reverse-proxy
+
+volumes:
+    prometheus_data: {}
+
+networks:
+    metrics:
+        name: ${PROMETHEUS_NAME}_metrics
+    reverse-proxy:
+        external: true
+        name: ${LOADBALANCER_NAME}_reverse-proxy
