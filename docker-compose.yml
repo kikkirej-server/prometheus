@@ -1,6 +1,8 @@
+version: '3.8'
 services:
     prometheus:
       image: prom/prometheus
+      restart: unless-stopped
       volumes:
         - "./docker-compose/:/etc/prometheus/:ro"
         - "prometheus_data:/prometheus"
@@ -9,8 +11,6 @@ services:
         - '--storage.tsdb.path=/prometheus'
         - '--web.console.libraries=/usr/share/prometheus/console_libraries'
         - '--web.console.templates=/usr/share/prometheus/consoles'
-        - '--web.external-url=/prometheus/'
-        - '--web.route-prefix=/prometheus/'
       labels:
         - server.user=${TRAEFIK_IDENT}
         - "traefik.enable=true"
