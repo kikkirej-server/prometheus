@@ -56,6 +56,11 @@ scrape_configs:
 
     static_configs:
          - targets: ['grafana:3000']
+
+  - job_name: 'grafana-fitx'
+
+    static_configs:
+         - targets: ['grafana-fitx:3000']
     
   - job_name: 'jaeger-agent'
 
@@ -71,4 +76,9 @@ scrape_configs:
 
     static_configs:
          - targets: ['jaeger-query:16687']
+  
+  - job_name: 'nextcloud'
+
+    static_configs:
+          - targets: ['cloud-prometheus-exporter:9205']
 
