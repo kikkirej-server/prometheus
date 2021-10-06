@@ -15,7 +15,7 @@ services:
         - server.user=${TRAEFIK_IDENT}
         - "traefik.enable=true"
         - traefik.docker.network=${PROMETHEUS_NAME}_metrics
-        - "traefik.http.routers.prometheus.rule=Host(`prometheus.kikkirej.net`)"
+        - "traefik.http.routers.prometheus.rule=Host(`prometheus.${DOMAIN}`)"
         - "traefik.http.routers.prometheus.service=prometheus"
         - "traefik.http.routers.prometheus.entrypoints=websecure"
         - "traefik.http.routers.prometheus.middlewares=security-chain@file"
